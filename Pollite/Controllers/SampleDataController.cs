@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Pollite.Controllers
 {
-    [Route("api/[controller]")]
+    // [Route("/api/[controller]")]
     public class SampleDataController : Controller
     {
         private static string[] Summaries = new[]
@@ -14,9 +14,10 @@ namespace Pollite.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        [HttpGet("[action]")]
+        // [HttpGet("[action]")]
         public IEnumerable<WeatherForecast> WeatherForecasts()
         {
+            Console.WriteLine("getting forecasts...");
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
