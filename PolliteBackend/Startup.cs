@@ -44,9 +44,15 @@ namespace PolliteBackend
 
             // TODO: fix routes.
             app.UseMvc(routes => {
+                
+                routes.MapRoute(
+                    name: "api",
+                    template: "api/{controller=NotFound}/{action=Index}"
+                );
+
                 routes.MapRoute(
                     name: "default",
-                    template: "[controller=NotFound]/[action=Index]"
+                    template: "{controller=NotFound}/{action=Index}"
                 );
             });
         }

@@ -6,12 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PolliteBackend.Controllers
 {
-    [ApiController]
+    // [ApiController]
     public class NotFoundController : Controller
     {
-        // GET api/values
-        [HttpGet]
-        public JsonResult Get()
+        // [HttpGet]
+        public JsonResult Index()
         {
             return Json("not found");
         }
