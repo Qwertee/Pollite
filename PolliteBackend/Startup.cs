@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using PolliteBackend.Models;
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace PolliteBackend
 {
@@ -26,6 +29,10 @@ namespace PolliteBackend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // TODO: Change this in production to a production database (use conditions to check if we are dev or not)
+            services.AddDbContext<PollContext>(options => options.UseMySql(Configuration.GetConnectionString("PolliteTest"),
+                mysqlOptions => { mysqlOptions.ServerVersion(new Version(5, 7, 17), ServerType.MariaDb); }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
