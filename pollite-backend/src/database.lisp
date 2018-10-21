@@ -17,7 +17,10 @@
   (mapcar #'mito:ensure-table-exists *tables*))
 
 (defun migrate-all-tables ()
-  (mapcar #'mito:migrate-table *tables*))
+  (mapcar (lambda (table)
+            (when (mito:migration-expressions table)
+              (mito:migrate-table table)))
+          *tables*))
 
 (defclass poll ()
   ((id :col-type :int
@@ -32,22 +35,9 @@
          :accessor hash))
   (:metaclass mito:dao-table-class))
 
-(defclass vote ()
-  ((id :col-type :int
-       :initarg :id
-       :reader id
-       :primary-key t)
-   ;; references which poll the voter has voted on
-   (option_id :col-type :int
-            :initarg option-id
-            :accessor option-id)
-   (hash :col-type :text
-         :initarg :hash
-         :accessor hash)
-   (address :col-type :text
-            :initarg :address
-            :accessor address))
-  (:metaclass mito:dao-table-class))
+;;;; TODO: Get this method working (can't find the id method for some reason)
+(defmethod get-options ((p poll))
+  (mito:find-dao 'option :poll-id (id p)))
 
 (defclass option ()
   ((id :col-type :int
@@ -61,4 +51,21 @@
    (text :col-type :text
          :initarg :text
          :reader text))
+  (:metaclass mito:dao-table-class))
+
+(defclass vote ()
+  ((id :col-type :int
+       :initarg :id
+       :reader id
+       :primary-key t)
+   ;; references which poll the voter has voted on
+   (option_id :col-type :int
+              :initarg option-id
+              :accessor option-id)
+   (hash :col-type :text
+         :initarg :hash
+         :accessor hash)
+   (address :col-type :text
+            :initarg :address
+            :accessor address))
   (:metaclass mito:dao-table-class))
