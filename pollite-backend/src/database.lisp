@@ -35,9 +35,9 @@
          :accessor hash))
   (:metaclass mito:dao-table-class))
 
-;;;; TODO: Get this method working (can't find the id method for some reason)
-(defmethod get-options ((p poll))
-  (mito:find-dao 'option :poll-id (id p)))
+(defmethod get-options ((poll poll))
+  ;; retrieve returns all that match, find return the first that matches
+  (mito:retrieve-dao 'option :poll_id (id poll)))
 
 (defclass option ()
   ((id :col-type :int
