@@ -39,6 +39,9 @@
   ;; retrieve returns all that match, find return the first that matches
   (mito:retrieve-dao 'option :poll_id (id poll)))
 
+(defmethod count-all-votes ((poll poll))
+  (reduce #'+ (mapcar #'count-votes (get-options poll)) :initial-value 0))
+
 (defclass option ()
   ((id :col-type :int
        :initarg :id
@@ -53,6 +56,9 @@
          :reader text))
   (:metaclass mito:dao-table-class))
 
+(defmethod count-votes ((option option))
+  (length (mito:retrieve-dao 'vote :option_id (id option))))
+
 (defclass vote ()
   ((id :col-type :int
        :initarg :id
@@ -60,7 +66,7 @@
        :primary-key t)
    ;; references which poll the voter has voted on
    (option_id :col-type :int
-              :initarg option-id
+              :initarg :option-id
               :accessor option-id)
    (hash :col-type :text
          :initarg :hash
