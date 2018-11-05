@@ -7,6 +7,7 @@
                  [org.jdbi/jdbi3-core "3.5.1"]
                  [ring/ring-defaults "0.3.2"]
                  [org.clojure/data.json "0.2.6"]
+                 [honeysql "0.9.4"]
                  [mysql/mysql-connector-java "8.0.13"]]
   :plugins [[lein-ring "0.12.4"]]
   :ring {:handler pollite-backend.handler/app}
