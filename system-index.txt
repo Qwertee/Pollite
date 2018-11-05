@@ -1,1 +1,0 @@
-pollite-backend/pollite-backend.asd
