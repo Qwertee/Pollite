@@ -1,5 +1,0 @@
-# Pollite-Backend
-
-## Usage
-
-## Installation
