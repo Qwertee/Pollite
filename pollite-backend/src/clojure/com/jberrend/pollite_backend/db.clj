@@ -1,7 +1,7 @@
-(ns pollite-backend.db
+(ns com.jberrend.pollite-backend.db
   (:require [honeysql.core :as sql])
-  (:import (org.jdbi.v3.core Jdbi)
-           (pollite_backend.models.option OptionMapper)))
+  (:import (org.jdbi.v3.core Jdbi))
+  (:gen-class))
 
 (def ds (Jdbi/create "jdbc:mysql://167.99.235.49:3306/pollite_test" "pollite_user" "password"))
 
@@ -15,6 +15,3 @@
      (-> handle#
          (.createQuery (first (sql/format ~query)))
          (.map (new ~mapper)))))
-
-(defn get-options []
-  (select OptionMapper "select * from option"))

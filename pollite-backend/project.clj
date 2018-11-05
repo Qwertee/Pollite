@@ -9,7 +9,10 @@
                  [org.clojure/data.json "0.2.6"]
                  [honeysql "0.9.4"]
                  [mysql/mysql-connector-java "8.0.13"]]
+  :source-paths ["src/clojure"]
+  :java-source-paths ["src/java"]
   :plugins [[lein-ring "0.12.4"]]
+  :aot :all
   :ring {:handler pollite-backend.handler/app}
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
