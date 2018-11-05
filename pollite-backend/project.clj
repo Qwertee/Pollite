@@ -5,6 +5,7 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [compojure "1.6.1"]
                  [org.jdbi/jdbi3-core "3.5.1"]
+                 [org.jdbi/jdbi3-sqlobject "3.5.1"]
                  [ring/ring-defaults "0.3.2"]
                  [org.clojure/data.json "0.2.6"]
                  [honeysql "0.9.4"]

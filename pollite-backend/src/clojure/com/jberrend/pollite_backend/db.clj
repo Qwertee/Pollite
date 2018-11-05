@@ -1,9 +1,14 @@
-(ns com.jberrend.pollite-backend.db
+(ns com.jberrend.pollite_backend.db
   (:require [honeysql.core :as sql])
-  (:import (org.jdbi.v3.core Jdbi))
+  (:import (org.jdbi.v3.core Jdbi Handle)
+           (org.jdbi.v3.sqlobject SqlObjectPlugin)
+           (com.jberrend.pollite_backend.models OptionDao))
   (:gen-class))
 
 (def ds (Jdbi/create "jdbc:mysql://167.99.235.49:3306/pollite_test" "pollite_user" "password"))
+
+(defn initialize []
+  (.installPlugin ds (SqlObjectPlugin.)))
 
 (defmacro select
   "executes the given query map, placing the matching rows into
@@ -15,3 +20,18 @@
      (-> handle#
          (.createQuery (first (sql/format ~query)))
          (.map (new ~mapper)))))
+
+(defn insert-option [option]
+  (let [handle (.open ds)
+        dao (.attach handle OptionDao)]
+    (-> dao
+        (.insertOption option))))
+
+(def option {"poll-id" 0
+             "text" "this is an option"
+             "created-at" nil
+             "updated-at" nil})
+
+(defn insert-test []
+  (insert-option option))
+

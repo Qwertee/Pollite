@@ -1,4 +1,4 @@
-(ns com.jberrend.pollite-backend.models.option
+(ns com.jberrend.pollite_backend.models.option
   (:import (org.jdbi.v3.core.mapper RowMapper)
            (java.sql Date))
   (:gen-class))
