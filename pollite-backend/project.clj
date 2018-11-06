@@ -12,6 +12,10 @@
                  [mysql/mysql-connector-java "8.0.13"]]
   :source-paths ["src/clojure"]
   :java-source-paths ["src/java"]
+
+  ;; need to compile the models before the db so dependencies aren't messed up
+  ;; (is there seriously no better way to do this?????)
+  :prep-tasks ["javac" ["compile" "com.jberrend.pollite_backend.models.option"]]
   :plugins [[lein-ring "0.12.4"]]
   :aot :all
   :ring {:handler pollite-backend.handler/app}

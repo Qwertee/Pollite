@@ -2,13 +2,24 @@
   (:require [honeysql.core :as sql])
   (:import (org.jdbi.v3.core Jdbi Handle)
            (org.jdbi.v3.sqlobject SqlObjectPlugin)
-           (com.jberrend.pollite_backend.models OptionDao))
+           (com.jberrend.pollite_backend.models OptionDao)
+           (com.jberrend.pollite_backend.models.option Option))
   (:gen-class))
 
 (def ds (Jdbi/create "jdbc:mysql://167.99.235.49:3306/pollite_test" "pollite_user" "password"))
 
-(defn initialize []
+(defn initialize
+  "Initializes the necessary plugins for JDBI before any transactions can take place"
+  []
   (.installPlugin ds (SqlObjectPlugin.)))
+
+(defn map-key->string-key
+  "Converts the keyword keys of a map to their string representations. This is useful for passing to the JDBI DAO
+   for the purpose of using the maps to modify the database"
+  [record]
+  (into {}
+        (for [[k v] record]
+          [(name k) v])))
 
 (defmacro select
   "executes the given query map, placing the matching rows into
@@ -25,14 +36,10 @@
   (let [handle (.open ds)
         dao (.attach handle OptionDao)]
     (-> dao
-        (.insertOption option))))
+        (.insertOption (map-key->string-key option)))))
 
-(def option {"poll-id" 0
-             "text" "this is an option MAP"
-             "created_at" nil
-             "updated_at" nil})
-
-;; works
-(defn insert-test []
-  (insert-option option))
-
+(def option (Option. nil
+                     1
+                     "this is an instance test"
+                     nil
+                     nil))

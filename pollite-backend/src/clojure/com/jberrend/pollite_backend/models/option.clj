@@ -5,10 +5,10 @@
 
 (defrecord Option
   [^Integer id
-   ^Integer poll-id
+   ^Integer poll_id
    ^String text
-   ^Date created-at
-   ^Date updated-at])
+   ^Date created_at
+   ^Date updated_at])
 
 (deftype OptionMapper
   []
