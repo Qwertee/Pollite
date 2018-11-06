@@ -28,10 +28,11 @@
         (.insertOption option))))
 
 (def option {"poll-id" 0
-             "text" "this is an option"
-             "created-at" nil
-             "updated-at" nil})
+             "text" "this is an option MAP"
+             "created_at" nil
+             "updated_at" nil})
 
+;; works
 (defn insert-test []
   (insert-option option))
 
