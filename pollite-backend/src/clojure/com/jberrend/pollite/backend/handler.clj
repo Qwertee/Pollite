@@ -1,4 +1,4 @@
-(ns com.jberrend.pollite_backend.handler
+(ns com.jberrend.pollite.backend.handler
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
             [clojure.data.json :as json]

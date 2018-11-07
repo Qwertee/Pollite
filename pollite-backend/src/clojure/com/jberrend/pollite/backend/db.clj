@@ -1,9 +1,9 @@
-(ns com.jberrend.pollite_backend.db
+(ns com.jberrend.pollite.backend.db
   (:require [honeysql.core :as sql])
-  (:import (org.jdbi.v3.core Jdbi Handle)
+  (:import (org.jdbi.v3.core Jdbi)
            (org.jdbi.v3.sqlobject SqlObjectPlugin)
-           (com.jberrend.pollite_backend.models OptionDao)
-           (com.jberrend.pollite_backend.models.option Option))
+           (com.jberrend.pollite.backend.models.option Option)
+           (com.jberrend.pollite.backend.models.poll Poll))
   (:gen-class))
 
 (def ds (Jdbi/create "jdbc:mysql://167.99.235.49:3306/pollite_test" "pollite_user" "password"))
@@ -25,21 +25,32 @@
   "executes the given query map, placing the matching rows into
    objects as determined by the passed mapper type
 
-   ex. (select OptionMapper 'select * from option'"
+   ex. (select OptionMapper {:select [:*] :from [:option]}"
   [mapper query]
   `(let [handle# (.open ds)]
      (-> handle#
          (.createQuery (first (sql/format ~query)))
          (.map (new ~mapper)))))
 
-(defn insert-option [option]
-  (let [handle (.open ds)
-        dao (.attach handle OptionDao)]
-    (-> dao
-        (.insertOption (map-key->string-key option)))))
+(defmacro insert
+  "Inserts the provided model instance into the given database using the given DAO for translation."
+  ;; TODO: get rid of dao-type - infer based on type of model
+  [model dao-type]
+  `(let [handle# (.open ds)
+         dao# (.attach handle# ~dao-type)]
+     (-> dao#
+         (.insert (map-key->string-key ~model)))))
 
+;; example option instance for repl use
 (def option (Option. nil
                      1
                      "this is an instance test"
                      nil
                      nil))
+
+;; example poll instance for repl use
+(def poll (Poll. nil
+                 "Is this a good prompt?"
+                 "0xHASHCODE"
+                 nil
+                 nil))
