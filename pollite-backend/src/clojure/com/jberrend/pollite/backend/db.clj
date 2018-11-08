@@ -29,7 +29,8 @@
   [mapper query]
   `(let [handle# (.open ds)]
      (-> handle#
-         (.createQuery (first (sql/format ~query)))
+         ; (first (sql/format ~query))
+         (.createQuery ~query)
          (.map (new ~mapper)))))
 
 (defmacro insert
@@ -52,5 +53,4 @@
 (def poll (Poll. nil
                  "Is this a good prompt?"
                  "0xHASHCODE"
-                 nil
                  nil))

@@ -8,8 +8,7 @@
   [^Integer id
    ^String prompt
    ^String hash
-   ^Date created_at
-   ^Date updated_at])
+   ^Date created_at])
 
 (deftype PollMapper
   []
@@ -17,5 +16,4 @@
   (map [_ rs _] (->Poll (.getInt rs "id")
                         (.getString rs "prompt")
                         (.getString rs "hash")
-                        (.getDate rs "created_at")
-                        (.getDate rs "updated_at"))))
+                        (.getDate rs "created_at"))))
