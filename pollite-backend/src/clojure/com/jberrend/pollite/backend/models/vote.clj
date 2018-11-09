@@ -13,7 +13,7 @@
   []
   RowMapper
   (map [_ rs _] (Vote. (.getInt rs "id")
-                        (.getInt rs "option_id")
-                        (.getString rs "hash")
-                        (.getString rs "address")
-                        (.getDate "created_at"))))
+                       (.getInt rs "option_id")
+                       (.getString rs "hash")
+                       (.getString rs "address")
+                       (.getDate rs "created_at"))))

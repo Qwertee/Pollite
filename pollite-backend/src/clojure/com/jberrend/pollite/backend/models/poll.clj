@@ -14,6 +14,6 @@
   []
   RowMapper
   (map [_ rs _] (Poll. (.getInt rs "id")
-                        (.getString rs "prompt")
-                        (.getString rs "hash")
-                        (.getDate rs "created_at"))))
+                       (.getString rs "prompt")
+                       (.getString rs "hash")
+                       (.getDate rs "created_at"))))
