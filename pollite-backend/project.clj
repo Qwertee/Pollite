@@ -16,7 +16,8 @@
   ;; need to compile the models before the db so dependencies aren't messed up
   ;; (is there seriously no better way to do this?????)
   :prep-tasks ["javac" ["compile" "com.jberrend.pollite.backend.models.option"]
-                       ["compile" "com.jberrend.pollite.backend.models.poll"]]
+                       ["compile" "com.jberrend.pollite.backend.models.poll"]
+                       ["compile" "com.jberrend.pollite.backend.models.vote"]]
   :plugins [[lein-ring "0.12.4"]]
   :aot :all
   :ring {:init com.jberrend.pollite.backend.handler/init

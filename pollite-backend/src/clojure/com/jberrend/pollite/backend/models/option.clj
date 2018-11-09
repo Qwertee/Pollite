@@ -14,7 +14,7 @@
 (deftype OptionMapper
   []
   RowMapper
-  (map [_ rs _] (->Option (.getInt rs "id")
+  (map [_ rs _] (Option. (.getInt rs "id")
                           (.getInt rs "poll_id")
                           (.getString rs "text")
                           (.getDate rs "created_at")
