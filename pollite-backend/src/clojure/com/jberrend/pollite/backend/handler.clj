@@ -21,11 +21,15 @@
 
            ;; Should return all necessary info for frontend to display poll
            (GET "/poll/:hash" hash
-                {:status 200
-                 :headers json-response-headers
-                 :body (json/write-str                      ; format the json map
+             {:status  200
+              :headers json-response-headers
+              :body    (json/write-str                      ; format the json map
                          (poll-formatter/format-response    ; generate response json
-                           (-> hash :route-params :hash)))})
+                           (-> hash :route-params :hash))
+                         :key-fn #(do
+                                    (if (.contains % "option-")
+                                      %
+                                      %)))})
            (route/not-found "Not Found"))
 
 

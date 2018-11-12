@@ -14,8 +14,8 @@
   (.installPlugin ds (SqlObjectPlugin.)))
 
 (defn map-key->string-key
-  "Converts the keyword keys of a map to their string representations. This is useful for passing to the JDBI DAO
-   for the purpose of using the maps to modify the database"
+  "Converts the keyword keys of a map to their string representations. This is useful for
+   passing to the JDBI DAO for the purpose of using the maps to modify the database"
   [record]
   (into {}
         (for [[k v] record]
@@ -31,10 +31,12 @@
      (-> handle#
          ; (first (sql/format ~query))
          (.createQuery ~query)
-         (.map (new ~mapper)))))
+         (.map (new ~mapper))
+         (.list))))
 
 (defmacro insert
-  "Inserts the provided model instance into the given database using the given DAO for translation."
+  "Inserts the provided model instance into the given database using the given DAO for
+   translation."
   ;; TODO: get rid of dao-type - infer based on type of model
   [model dao-type]
   `(let [handle# (.open ds)
