@@ -5,7 +5,7 @@
 (defrecord Vote
   [^Integer id
    ^Integer option_id
-   ^String hash
+   ^String uuid
    ^String address
    ^Date created_at])
 
@@ -14,6 +14,6 @@
   RowMapper
   (map [_ rs _] (Vote. (.getInt rs "id")
                        (.getInt rs "option_id")
-                       (.getString rs "hash")
+                       (.getString rs "uuid")
                        (.getString rs "address")
                        (.getDate rs "created_at"))))

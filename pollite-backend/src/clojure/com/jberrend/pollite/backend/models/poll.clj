@@ -7,7 +7,7 @@
 (defrecord Poll
   [^Integer id
    ^String prompt
-   ^String hash
+   ^String uuid
    ^Date created_at])
 
 (deftype PollMapper
@@ -15,5 +15,5 @@
   RowMapper
   (map [_ rs _] (Poll. (.getInt rs "id")
                        (.getString rs "prompt")
-                       (.getString rs "hash")
+                       (.getString rs "uuid")
                        (.getDate rs "created_at"))))

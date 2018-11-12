@@ -14,9 +14,9 @@
            "votes" (count-votes o votes)})))
 
 (defn format-response
-  "Finds the poll, options, and votes from a given poll hash and returns the formatted json"
-  [hash]
-  (let [poll (first (db/select PollMapper (str "SELECT * FROM poll WHERE hash='" hash "'")))
+  "Finds the poll, options, and votes from a given poll uuid and returns the formatted json"
+  [uuid]
+  (let [poll (first (db/select PollMapper (str "SELECT * FROM poll WHERE uuid='" uuid "'")))
 
         options (db/select OptionMapper (str "SELECT * FROM option WHERE poll_id="
                                              (:id poll)))

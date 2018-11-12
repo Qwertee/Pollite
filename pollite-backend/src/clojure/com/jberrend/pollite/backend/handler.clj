@@ -20,12 +20,12 @@
                                     :b "json"})})
 
            ;; Should return all necessary info for frontend to display poll
-           (GET "/poll/:hash" hash
+           (GET "/poll/:uuid" uuid
              {:status  200
               :headers json-response-headers
               :body    (json/write-str                      ; format the json map
                          (poll-formatter/format-response    ; generate response json
-                           (-> hash :route-params :hash)))})
+                           (-> uuid :route-params :uuid)))})
            (route/not-found "Not Found"))
 
 
