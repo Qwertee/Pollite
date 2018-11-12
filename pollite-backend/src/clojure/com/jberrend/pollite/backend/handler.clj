@@ -25,11 +25,7 @@
               :headers json-response-headers
               :body    (json/write-str                      ; format the json map
                          (poll-formatter/format-response    ; generate response json
-                           (-> hash :route-params :hash))
-                         :key-fn #(do
-                                    (if (.contains % "option-")
-                                      %
-                                      %)))})
+                           (-> hash :route-params :hash)))})
            (route/not-found "Not Found"))
 
 
