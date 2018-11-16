@@ -45,14 +45,14 @@
          (.insert (map-key->string-key ~model)))))
 
 ;; example option instance for repl use
-(def option (Option. nil
-                     1
-                     "this is an instance test"
-                     nil
-                     nil))
-
-;; example poll instance for repl use
-(def poll (Poll. nil
-                 "Is this a good prompt?"
-                 "0xHASHCODE"
-                 nil))
+;(def option (Option. nil
+;                     1
+;                     "this is an instance test"
+;                     nil
+;                     nil))
+;
+;;; example poll instance for repl use
+;(def poll (Poll. nil
+;                 "Is this a good prompt?"
+;                 "0xHASHCODE"
+;                 nil))

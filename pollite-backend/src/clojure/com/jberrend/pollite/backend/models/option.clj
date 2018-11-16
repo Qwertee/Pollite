@@ -7,15 +7,15 @@
 (defrecord Option
   [^Integer id
    ^Integer poll_id
+   ^String uuid
    ^String text
-   ^Date created_at
-   ^Date updated_at])
+   ^Date created_at])
 
 (deftype OptionMapper
   []
   RowMapper
   (map [_ rs _] (Option. (.getInt rs "id")
-                          (.getInt rs "poll_id")
-                          (.getString rs "text")
-                          (.getDate rs "created_at")
-                          (.getDate rs "updated_at"))))
+                         (.getInt rs "poll_id")
+                         (.getString rs "uuid")
+                         (.getString rs "text")
+                         (.getDate rs "created_at"))))
