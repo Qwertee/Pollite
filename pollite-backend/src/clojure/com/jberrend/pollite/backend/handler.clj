@@ -7,7 +7,11 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]])
   (:gen-class))
 
-(def json-response-headers {"Content-Type" "application/json; charset=utf-8"})
+;; TODO: are the CORS headers really needed? site seems to work with them, so leave for now
+(def json-response-headers {"Content-Type" "application/json; charset=utf-8"
+                            "Access-Control-Allow-Headers" "Content-Type"
+                            "Access-Control-Allow-Methods" "GET, POST, OPTIONS"
+                            "Access-Control-Allow-Origin" "*"})
 
 ;(defn parse-int [str]
 ;  (Integer. (re-find #"[0-9]*" str)))

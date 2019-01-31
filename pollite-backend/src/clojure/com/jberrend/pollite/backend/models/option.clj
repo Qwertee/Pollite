@@ -13,7 +13,10 @@
 
 (deftype OptionMapper
   []
-  RowMapper
+  RowMapper ; extends the interface
+
+  ;; implement the map method declared in the RowMapper interface
+  ;; map in java takes 2 arguments, the first argument here is a reference to 'this'
   (map [_ rs _] (Option. (.getInt rs "id")
                          (.getInt rs "poll_id")
                          (.getString rs "uuid")
