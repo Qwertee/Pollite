@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NewComponent } from './new/new.component';
-import {NewModule} from "./new/new.module";
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
-  declarations: [],
+  declarations: [NewComponent],
   imports: [
     CommonModule,
-    NewModule
+    ReactiveFormsModule
+  ],
+  exports: [
+    NewComponent
   ]
 })
 export class PollModule { }

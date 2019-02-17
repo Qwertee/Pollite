@@ -3,11 +3,11 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import {RouterModule, Routes} from "@angular/router";
-import {PollModule} from "./poll/poll.module";
+import {RouterModule, Routes} from '@angular/router';
+import {PollModule} from './poll/poll.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import {FormsModule} from "@angular/forms";
-import {NewComponent} from "./poll/new/new.component";
+import {FormsModule} from '@angular/forms';
+import { NewComponent } from './poll/new/new.component';
 
 const appRoutes: Routes = [
   {path: 'new', component: NewComponent},
