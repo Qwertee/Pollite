@@ -4,14 +4,15 @@
             [clojure.data.json :as json]
             [com.jberrend.pollite.backend.formatters.poll-formatter :as poll-formatter]
             [com.jberrend.pollite.backend.db :as db]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]])
+            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
+            [ring.middleware.json :refer [wrap-json-body]])
   (:gen-class))
 
 ;; TODO: are the CORS headers really needed? site seems to work with them, so leave for now
 (def json-response-headers {"Content-Type" "application/json; charset=utf-8"
+                            "Access-Control-Allow-Origin" "*"
                             "Access-Control-Allow-Headers" "Content-Type"
-                            "Access-Control-Allow-Methods" "GET, POST, OPTIONS"
-                            "Access-Control-Allow-Origin" "*"})
+                            "Access-Control-Allow-Methods" "GET,POST,OPTIONS"})
 
 ;(defn parse-int [str]
 ;  (Integer. (re-find #"[0-9]*" str)))
@@ -30,11 +31,23 @@
               :body    (json/write-str                      ; format the json map
                          (poll-formatter/format-response    ; generate response json
                            (-> uuid :route-params :uuid)))})
+
+           (OPTIONS "/new/poll" []
+             {:headers json-response-headers})
+
+           (POST "/new/poll" params
+             (println params)
+             {:status 200
+              :headers json-response-headers
+              :body (json/write-str "success")})
            (route/not-found "Not Found"))
 
 
 (defn init []
   (db/initialize))
 
+;(def app
+;  (wrap-defaults app-routes api-defaults))
+
 (def app
-  (wrap-defaults app-routes site-defaults))
+  (wrap-json-body app-routes))

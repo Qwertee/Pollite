@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class PollService {
     this.http.get('http://localhost:3000/poll/0xHASHCODE').subscribe((data) => console.log(data));
   }
 
-  testService() {
-    console.log('the service works!');
+  post(json): Observable<Object> {
+    return this.http.post('http://localhost:3000/new/poll', json);
   }
 }

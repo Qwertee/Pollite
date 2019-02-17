@@ -3,7 +3,8 @@
   (:import (org.jdbi.v3.core Jdbi)
            (org.jdbi.v3.sqlobject SqlObjectPlugin)
            (com.jberrend.pollite.backend.models.option Option)
-           (com.jberrend.pollite.backend.models.poll Poll))
+           (com.jberrend.pollite.backend.models.poll Poll)
+           (java.util UUID))
   (:gen-class))
 
 (def ds (Jdbi/create "jdbc:mysql://167.99.235.49:3306/pollite_test" "pollite_user" "password"))

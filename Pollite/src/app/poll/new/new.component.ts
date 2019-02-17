@@ -25,6 +25,7 @@ export class NewComponent implements OnInit {
 
   onSubmit() {
     console.warn(this.pollForm.value);
+    this.pollService.post(this.pollForm.value).subscribe();
   }
 
   constructor(private fb: FormBuilder, private pollService: PollService) { }

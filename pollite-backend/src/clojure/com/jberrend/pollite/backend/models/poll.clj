@@ -17,3 +17,7 @@
                        (.getString rs "prompt")
                        (.getString rs "uuid")
                        (.getDate rs "created_at"))))
+
+(defn new-poll [prompt]
+  (let [uuid (java.util.UUID/randomUUID)]
+    (Poll. nil prompt uuid nil)))

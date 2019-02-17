@@ -3,7 +3,7 @@
            (java.sql Date))
   (:gen-class))
 
-;; TODO: Do we need to updated at time?
+;; TODO: Do we need to have the updated at time?
 (defrecord Option
   [^Integer id
    ^Integer poll_id
@@ -22,3 +22,6 @@
                          (.getString rs "uuid")
                          (.getString rs "text")
                          (.getDate rs "created_at"))))
+
+(defn new-option [poll-id text]
+  (Option. nil poll-id (java.util.UUID/randomUUID) text nil))
