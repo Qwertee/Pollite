@@ -1,6 +1,7 @@
 (ns com.jberrend.pollite.backend.models.option
   (:import (org.jdbi.v3.core.mapper RowMapper)
-           (java.sql Date))
+           (java.sql Date)
+           (java.util UUID))
   (:gen-class))
 
 ;; TODO: Do we need to have the updated at time?
@@ -24,4 +25,4 @@
                          (.getDate rs "created_at"))))
 
 (defn new-option [poll-id text]
-  (Option. nil poll-id (java.util.UUID/randomUUID) text nil))
+  (Option. nil poll-id (str (UUID/randomUUID)) text nil))

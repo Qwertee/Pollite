@@ -22,7 +22,9 @@
   :plugins [[lein-ring "0.12.4"]]
   :aot :all
   :ring {:init com.jberrend.pollite.backend.handler/init
-         :handler com.jberrend.pollite.backend.handler/app}
+         :handler com.jberrend.pollite.backend.handler/app
+         :nrepl {:start? true
+                 :port 9998}}                               ; can connect repl to running server at this port!
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]
                         [ring/ring-mock "0.3.2"]]}})

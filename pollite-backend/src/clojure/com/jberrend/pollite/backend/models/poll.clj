@@ -1,7 +1,8 @@
 (ns com.jberrend.pollite.backend.models.poll
   (:gen-class)
   (:import (java.sql Date)
-           (org.jdbi.v3.core.mapper RowMapper)))
+           (org.jdbi.v3.core.mapper RowMapper)
+           (java.util UUID)))
 
 ;; TODO: Do we need the updated at time?
 (defrecord Poll
@@ -19,5 +20,5 @@
                        (.getDate rs "created_at"))))
 
 (defn new-poll [prompt]
-  (let [uuid (java.util.UUID/randomUUID)]
+  (let [uuid (str (UUID/randomUUID))]
     (Poll. nil prompt uuid nil)))

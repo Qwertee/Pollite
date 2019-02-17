@@ -1,13 +1,23 @@
 (ns com.jberrend.pollite.backend.db
   (:require [honeysql.core :as sql])
   (:import (org.jdbi.v3.core Jdbi)
-           (org.jdbi.v3.sqlobject SqlObjectPlugin)
-           (com.jberrend.pollite.backend.models.option Option)
-           (com.jberrend.pollite.backend.models.poll Poll)
-           (java.util UUID))
+           (org.jdbi.v3.sqlobject SqlObjectPlugin))
   (:gen-class))
 
-(def ds (Jdbi/create "jdbc:mysql://167.99.235.49:3306/pollite_test" "pollite_user" "password"))
+;; taken (and slightly modified) from https://stackoverflow.com/a/7781443
+(defn- load-props
+  [file-name]
+  (with-open [^java.io.Reader reader (-> file-name
+                                         clojure.java.io/resource
+                                         .getFile
+                                         clojure.java.io/reader)]
+    (let [props (java.util.Properties.)]
+      (.load props reader)
+      (into {} (for [[k v] props] [(keyword k) (read-string v)])))))
+
+(def properties (load-props "props.properties"))
+
+(def ds (Jdbi/create (:db-conn-str properties) (:db-username properties) (:db-password properties)))
 
 (defn initialize
   "Initializes the necessary plugins for JDBI before any transactions can take place"
