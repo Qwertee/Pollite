@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, Validators} from '@angular/forms';
 
 @Component({
   selector: 'new-poll-form',
@@ -23,7 +23,7 @@ export class FormComponent implements OnInit {
   }
 
   onSubmit() {
-
+    console.warn(this.pollForm.value);
   }
 
   constructor(private fb: FormBuilder) { }
