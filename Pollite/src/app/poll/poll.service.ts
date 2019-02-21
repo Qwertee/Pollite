@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,6 @@ export class PollService {
   }
 
   post(json): Observable<Object> {
-    return this.http.post('http://localhost:3000/new/poll', json);
+    return this.http.post(environment.serverEndpoint + '/new/poll', json);
   }
 }
