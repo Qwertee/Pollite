@@ -1,3 +1,3 @@
-db-conn-str="YOUR CONNECTION STRING"
+db-conn-str="jdbc:mysql://ADDRESS:PORT/DB_NAME"
 db-username="USERNAME"
 db-password="PASSWORD"
