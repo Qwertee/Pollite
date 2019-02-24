@@ -17,14 +17,16 @@
     <tr>
       <th>Option</th>
       <th class="">Votes</th>
-      <th class="">Vote</th>
+      <th class="has-text-centered">Vote</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let option of poll.options">
       <td>{{option.text}}</td>
       <td>{{option.votes}}</td>
-      <td>vote</td>
+      <td class="has-text-centered">
+        <a class="button is-success">Vote!</a>
+      </td>
     </tr>
   </tbody>
 </table>
