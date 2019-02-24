@@ -2,12 +2,12 @@
   <div class="field">
     <label class="label">Title</label>
     <div class="control">
-      <input class="input" type="text" formControlName="pollName" placeholder="Enter poll title" required>
+      <input class="input" type="text" formControlName="prompt" placeholder="Enter poll title" required>
     </div>
   </div>
 
-  <div class="field" formArrayName="pollOptions">
-    <div *ngFor="let _ of pollOptions.controls; let i=index;">
+  <div class="field" formArrayName="options">
+    <div *ngFor="let _ of options.controls; let i=index;">
 
       <div class="field">
 
@@ -15,7 +15,7 @@
           <div class="level">
             <div class="level-left">Option</div>
 
-            <button [disabled]="pollOptions.length <= 1"
+            <button [disabled]="options.length <= 1"
                     (click)="removeOption(i)"
                     class="button is-danger is-rounded level-right is-small">
               Remove

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormArray, FormBuilder, Validators} from '@angular/forms';
 import {PollService} from '../poll.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-poll-new',
@@ -9,31 +10,31 @@ import {PollService} from '../poll.service';
 })
 export class NewComponent implements OnInit {
   pollForm = this.fb.group({
-    pollName: ['', Validators.required],
-    pollOptions: this.fb.array([
+    prompt: ['', Validators.required],
+    options: this.fb.array([
       this.fb.control('')
     ], Validators.required)
   });
 
   addOption() {
-    this.pollOptions.push(this.fb.control(''));
+    this.options.push(this.fb.control(''));
   }
 
-  get pollOptions() {
-    return this.pollForm.get('pollOptions') as FormArray;
+  get options() {
+    return this.pollForm.get('options') as FormArray;
   }
 
   onSubmit() {
     console.warn(this.pollForm.value);
-    this.pollService.post(this.pollForm.value).subscribe();
+    this.pollService.post(this.pollForm.value).subscribe(r => this.router.navigate(['/poll', r['uuid']]));
   }
 
-  constructor(private fb: FormBuilder, private pollService: PollService) { }
+  constructor(private fb: FormBuilder, private pollService: PollService, private router: Router) { }
 
   ngOnInit() {
   }
 
   removeOption(i: number) {
-    this.pollOptions.removeAt(i);
+    this.options.removeAt(i);
   }
 }

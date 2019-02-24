@@ -8,10 +8,12 @@ import {PollModule} from './poll/poll.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import {FormsModule} from '@angular/forms';
 import { NewComponent } from './poll/new/new.component';
+import {ViewComponent} from './poll/view/view.component';
 
 const appRoutes: Routes = [
   {path: 'new', component: NewComponent},
-  {path: '', redirectTo: '/new', pathMatch: 'full'}, // by default go to the new poll page
+  {path: 'poll/:uuid', component: ViewComponent},
+  {path: '', redirectTo: '/new', pathMatch: 'full'}, // by default go to the new poll page (nothing interesting for home page so far)
 
   {path: '**', component: PageNotFoundComponent}
 ];

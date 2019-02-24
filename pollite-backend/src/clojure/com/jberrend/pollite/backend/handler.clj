@@ -24,12 +24,13 @@
 (defn process-new-poll-payload
   "Takes the given request payload (sent by client) and inserts a new poll and its options into the database"
   [request-payload]
-  (let [p (poll/new-poll (str (get request-payload "pollName")))]
+  (let [p (poll/new-poll (str (get request-payload "prompt")))]
     (db/insert p PollDao)
     (let [poll (first (db/select PollMapper (str "SELECT * FROM poll WHERE uuid='" (:uuid p) "'")))
           poll-id (:id poll)]
-      (doseq [opt (get request-payload "pollOptions")]
+      (doseq [opt (get request-payload "options")]
         (db/insert (option/new-option poll-id opt) OptionDao)))
+    ;; TODO: return something other than uuid?
     (:uuid p)))
 
 
@@ -55,7 +56,7 @@
            (POST "/new/poll" params
              {:status  200
               :headers json-response-headers
-              :body    (json/write-str (poll-formatter/format-response (process-new-poll-payload (:body params))))})
+              :body    (json/write-str {:uuid (process-new-poll-payload (:body params))})})
 
            (route/not-found "Not Found"))
 
