@@ -1,3 +1,30 @@
-<p>
-  view works!
-</p>
+<section class="hero is-medium is-primary is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        {{poll.prompt}}
+      </h1>
+    </div>
+  </div>
+</section>
+
+<div *ngIf="poll === undefined">
+  <progress class="progress is-small is-primary" max="100"></progress>
+</div>
+
+<table *ngIf="poll !== undefined" class="table is-hoverable is-fullwidth">
+  <thead>
+    <tr>
+      <th>Option</th>
+      <th class="">Votes</th>
+      <th class="">Vote</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let option of poll.options">
+      <td>{{option.text}}</td>
+      <td>{{option.votes}}</td>
+      <td>vote</td>
+    </tr>
+  </tbody>
+</table>
