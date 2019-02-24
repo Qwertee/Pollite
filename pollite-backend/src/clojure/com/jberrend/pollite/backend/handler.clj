@@ -21,8 +21,9 @@
 ;(defn parse-int [str]
 ;  (Integer. (re-find #"[0-9]*" str)))
 
-(defn process-new-poll-payload [request-payload]
+(defn process-new-poll-payload
   "Takes the given request payload (sent by client) and inserts a new poll and its options into the database"
+  [request-payload]
   (let [p (poll/new-poll (str (get request-payload "pollName")))]
     (db/insert p PollDao)
     (let [poll (first (db/select PollMapper (str "SELECT * FROM poll WHERE uuid='" (:uuid p) "'")))
