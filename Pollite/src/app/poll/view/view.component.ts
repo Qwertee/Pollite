@@ -4,6 +4,7 @@ import {PollService} from '../poll.service';
 import {ActivatedRoute} from '@angular/router';
 
 import * as Fingerprint2 from 'fingerprintjs2';
+import {fingerprint} from '@angular/compiler/src/i18n/digest';
 
 @Component({
   selector: 'app-view',
@@ -12,6 +13,7 @@ import * as Fingerprint2 from 'fingerprintjs2';
 })
 export class ViewComponent implements OnInit {
   poll: Poll;
+  private murmur: string;
 
   constructor(private pollService: PollService, private route: ActivatedRoute) { }
 
@@ -19,12 +21,17 @@ export class ViewComponent implements OnInit {
     this.pollService.getPoll(this.route.snapshot.params.uuid).subscribe(res => {
       this.poll = res;
     });
-  }
 
-  determineFingerprint() {
-    setTimeout(function () {
-      Fingerprint2.get(function (components) {
-        console.log(components); // an array of components: {key: ..., value: ...}
+    setTimeout(() => {
+      Fingerprint2.get((components) => {
+        console.log(components);
+
+        // taken from https://fingerprintjs.com/ src
+        this.murmur = Fingerprint2.x64hash128(components.map(function(pair) {
+          return pair.value;
+        }).join(), 31);
+
+        console.log(this.murmur);
       });
     }, 500);
   }
