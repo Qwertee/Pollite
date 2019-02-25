@@ -23,6 +23,7 @@
   :aot :all
   :ring {:init com.jberrend.pollite.backend.handler/init
          :handler com.jberrend.pollite.backend.handler/app
+         :uberwar-name "pollite-server.war"
          :nrepl {:start? true
                  :port 9998}}                               ; can connect repl to running server at this port!
   :profiles
