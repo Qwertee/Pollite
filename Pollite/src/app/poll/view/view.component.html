@@ -1,32 +1,37 @@
-<section class="hero is-medium is-primary is-bold">
-  <div class="hero-body">
-    <div class="container">
-      <h1 class="title">
-        {{poll.prompt}}
-      </h1>
-    </div>
-  </div>
-</section>
-
 <div *ngIf="poll === undefined">
   <progress class="progress is-small is-primary" max="100"></progress>
 </div>
 
-<table *ngIf="poll !== undefined" class="table is-hoverable is-fullwidth">
-  <thead>
-    <tr>
-      <th>Option</th>
-      <th class="">Votes</th>
-      <th class="has-text-centered">Vote</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let option of poll.options">
-      <td>{{option.text}}</td>
-      <td>{{option.votes}}</td>
-      <td class="has-text-centered">
-        <a class="button is-success">Vote!</a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div *ngIf="poll !== undefined">
+  <section class="hero is-medium is-primary is-bold">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          {{poll.prompt}}
+        </h1>
+      </div>
+    </div>
+  </section>
+
+
+
+  <table class="table is-hoverable is-fullwidth">
+    <thead>
+      <tr>
+        <th>Option</th>
+        <th class="">Votes</th>
+        <th class="has-text-centered">Vote</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let option of poll.options">
+        <td>{{option.text}}</td>
+        <td>{{option.votes}}</td>
+        <td class="has-text-centered">
+          <a class="button is-success">Vote!</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
