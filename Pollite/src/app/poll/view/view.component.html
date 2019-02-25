@@ -28,7 +28,10 @@
         <td>{{option.text}}</td>
         <td>{{option.votes}}</td>
         <td class="has-text-centered">
-          <a class="button is-success">Vote!</a>
+          <a class="button is-success"
+             (click)="determineFingerprint()">
+            Vote!
+          </a>
         </td>
       </tr>
     </tbody>

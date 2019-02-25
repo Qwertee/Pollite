@@ -3,6 +3,8 @@ import {Poll} from '../poll';
 import {PollService} from '../poll.service';
 import {ActivatedRoute} from '@angular/router';
 
+import * as Fingerprint2 from 'fingerprintjs2';
+
 @Component({
   selector: 'app-view',
   templateUrl: './view.component.html',
@@ -19,4 +21,11 @@ export class ViewComponent implements OnInit {
     });
   }
 
+  determineFingerprint() {
+    setTimeout(function () {
+      Fingerprint2.get(function (components) {
+        console.log(components); // an array of components: {key: ..., value: ...}
+      });
+    }, 500);
+  }
 }
