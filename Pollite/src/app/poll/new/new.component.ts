@@ -25,7 +25,6 @@ export class NewComponent implements OnInit {
   }
 
   onSubmit() {
-    console.warn(this.pollForm.value);
     this.pollService.post(this.pollForm.value).subscribe(r => this.router.navigate(['/poll', r['uuid']]));
   }
 
