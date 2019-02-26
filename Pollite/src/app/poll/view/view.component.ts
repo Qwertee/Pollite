@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Poll} from '../poll';
+import {Option, Poll} from '../poll';
 import {PollService} from '../poll.service';
 import {ActivatedRoute} from '@angular/router';
 
 import * as Fingerprint2 from 'fingerprintjs2';
-import {fingerprint} from '@angular/compiler/src/i18n/digest';
 
 @Component({
   selector: 'app-view',
@@ -20,6 +19,7 @@ export class ViewComponent implements OnInit {
   ngOnInit() {
     this.pollService.getPoll(this.route.snapshot.params.uuid).subscribe(res => {
       this.poll = res;
+      console.log(this.poll.options);
     });
 
     setTimeout(() => {
@@ -31,8 +31,12 @@ export class ViewComponent implements OnInit {
           return pair.value;
         }).join(), 31);
 
-        console.log(this.murmur);
+        console.log('murmur: ' + this.murmur);
       });
     }, 500);
+  }
+
+  submitVote(option: Option) {
+    console.log('submitting vote for: ', option);
   }
 }

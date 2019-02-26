@@ -6,7 +6,7 @@
   [^Integer id
    ^Integer option_id
    ^String uuid
-   ^String address
+   ^String fingerprint
    ^Date created_at])
 
 (deftype VoteMapper
@@ -15,5 +15,5 @@
   (map [_ rs _] (Vote. (.getInt rs "id")
                        (.getInt rs "option_id")
                        (.getString rs "uuid")
-                       (.getString rs "address")
+                       (.getString rs "fingerprint")
                        (.getDate rs "created_at"))))

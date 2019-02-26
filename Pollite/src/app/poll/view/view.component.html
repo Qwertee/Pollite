@@ -28,9 +28,11 @@
         <td>{{option.text}}</td>
         <td>{{option.votes}}</td>
         <td class="has-text-centered">
-          <a class="button is-success">
+          <button class="button is-success"
+                  (click)="submitVote(option)"
+                  [disabled]="murmur === undefined">
             Vote!
-          </a>
+          </button>
         </td>
       </tr>
     </tbody>

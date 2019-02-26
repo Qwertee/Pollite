@@ -33,8 +33,10 @@
           [(name k) v])))
 
 (defmacro select
-  "executes the given query map, placing the matching rows into
-   objects as determined by the passed mapper type
+  "Executes the given query map, placing the matching rows into
+   objects as determined by the passed mapper type.
+
+   Returns a VECTOR of all found records (even if none or only one).
 
    ex. (select OptionMapper {:select [:*] :from [:option]}"
   [mapper query]
@@ -44,6 +46,10 @@
          (.createQuery ~query)
          (.map (new ~mapper))
          (.list))))
+
+(defmacro select-first
+  [mapper query]
+  `(first (select ~mapper ~query)))
 
 (defmacro insert
   "Inserts the provided model instance into the given database using the given DAO for

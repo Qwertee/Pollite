@@ -10,7 +10,9 @@
             [ring.middleware.json :refer [wrap-json-body]])
   (:gen-class)
   (:import (com.jberrend.pollite.backend.models PollDao OptionDao)
-           (com.jberrend.pollite.backend.models.poll PollMapper)))
+           (com.jberrend.pollite.backend.models.poll PollMapper)
+           (com.jberrend.pollite.backend.models.option OptionMapper)
+           (com.jberrend.pollite.backend.models.vote VoteMapper)))
 
 ;; TODO: are the CORS headers really needed? site seems to work with them, so leave for now
 (def json-response-headers {"Content-Type" "application/json; charset=utf-8"
@@ -26,12 +28,21 @@
   [request-payload]
   (let [p (poll/new-poll (str (get request-payload "prompt")))]
     (db/insert p PollDao)
-    (let [poll (first (db/select PollMapper (str "SELECT * FROM poll WHERE uuid='" (:uuid p) "'")))
+    (let [poll (db/select-first PollMapper (str "SELECT * FROM poll WHERE uuid='" (:uuid p) "'"))
           poll-id (:id poll)]
       (doseq [opt (get request-payload "options")]
         (db/insert (option/new-option poll-id opt) OptionDao)))
     ;; TODO: return something other than uuid?
     (:uuid p)))
+
+(defn submit-vote
+  ""
+  [uuid fingerprint]
+  (let [o (db/select-first OptionMapper (str "SELECT * FROM option WHERE uuid='" uuid "'"))
+        p (db/select-first PollMapper (str "SELECT * FROM poll WHERE id='" (:poll_id o) "'"))
+        votes (db/select VoteMapper (str "SELECT * FROM vote WHERE option_id IN "
+                                         "(SELECT option_id FROM option WHERE poll_id='" (:id p) "')"))]
+    o))
 
 
 
@@ -57,6 +68,14 @@
              {:status  200
               :headers json-response-headers
               :body    (json/write-str {:uuid (process-new-poll-payload (:body params))})})
+
+           (POST "/vote/:uuid/:fingerprint" [uuid fingerprint]
+             ;; need to make sure that the vote is legitimate (mainly that the fingerprint hasn't already
+             ;; voted in the poll.
+             {:status 200
+              :headers json-response-headers
+              :body (json/write-str (submit-vote uuid fingerprint))}
+             )
 
            (route/not-found "Not Found"))
 
