@@ -52,8 +52,8 @@
     (if (empty? votes)
       (do
         (db/insert (vote/new-vote (:id o) fingerprint) VoteDao)
-        (assoc (poll-formatter/format-response (:uuid p)) :vote-success "true"))
-      (assoc (poll-formatter/format-response (:uuid p)) :vote-success "false"))))
+        (poll-formatter/format-vote-response (:uuid p) true))
+      (poll-formatter/format-vote-response (:uuid p) false))))
 
 
 
@@ -69,7 +69,7 @@
              {:status  200
               :headers json-response-headers
               :body    (json/write-str                      ; format the json map
-                         (poll-formatter/format-response    ; generate response json
+                         (poll-formatter/format-poll-response    ; generate response json
                            (-> uuid :route-params :uuid)))})
 
            (OPTIONS "/new/poll" []

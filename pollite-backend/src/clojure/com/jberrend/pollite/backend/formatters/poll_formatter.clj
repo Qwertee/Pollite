@@ -14,8 +14,8 @@
            "uuid" (:uuid o)
            "votes" (count-votes o votes)})))
 
-(defn format-response
-  "Finds the poll, options, and votes from a given poll uuid and returns the formatted json"
+(defn format-poll-response
+  "Finds the poll, options, and votes from a given poll uuid and returns the formatted map"
   [uuid]
   (let [poll (db/select-only PollMapper (str "SELECT * FROM poll WHERE uuid='" uuid "'"))
 
@@ -29,3 +29,11 @@
                                          ")"))]
     {"prompt" (:prompt poll)
      "options" (format-options options votes)}))
+
+(defn format-vote-response
+  "Wrapper around format-poll-response which also includes a status for whether a vote attempt was
+   successful or not."
+  [poll-uuid
+   vote-success]
+  {"poll" (format-poll-response poll-uuid)
+   "vote-success" vote-success})
