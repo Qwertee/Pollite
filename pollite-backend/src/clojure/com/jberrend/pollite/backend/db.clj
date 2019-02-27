@@ -47,9 +47,14 @@
          (.map (new ~mapper))
          (.list))))
 
-(defmacro select-first
+(defmacro select-only
+  "Executes a select statement, but ensures that only one result is returned.
+   Throws an exception if zero, or more than one result was returned from query."
   [mapper query]
-  `(first (select ~mapper ~query)))
+  `(let [res# (select ~mapper ~query)]
+     (if (= 1 (count res#))
+       (first res#)
+       (throw (Exception. (str "Not one element was returned by query: " ~query))))))
 
 (defmacro insert
   "Inserts the provided model instance into the given database using the given DAO for

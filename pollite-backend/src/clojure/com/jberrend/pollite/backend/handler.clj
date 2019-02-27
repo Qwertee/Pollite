@@ -6,10 +6,11 @@
             [com.jberrend.pollite.backend.db :as db]
             [com.jberrend.pollite.backend.models.poll :as poll]
             [com.jberrend.pollite.backend.models.option :as option]
+            [com.jberrend.pollite.backend.models.vote :as vote]
             [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :refer [wrap-json-body]])
   (:gen-class)
-  (:import (com.jberrend.pollite.backend.models PollDao OptionDao)
+  (:import (com.jberrend.pollite.backend.models PollDao OptionDao VoteDao)
            (com.jberrend.pollite.backend.models.poll PollMapper)
            (com.jberrend.pollite.backend.models.option OptionMapper)
            (com.jberrend.pollite.backend.models.vote VoteMapper)))
@@ -28,7 +29,7 @@
   [request-payload]
   (let [p (poll/new-poll (str (get request-payload "prompt")))]
     (db/insert p PollDao)
-    (let [poll (db/select-first PollMapper (str "SELECT * FROM poll WHERE uuid='" (:uuid p) "'"))
+    (let [poll (db/select-only PollMapper (str "SELECT * FROM poll WHERE uuid='" (:uuid p) "'"))
           poll-id (:id poll)]
       (doseq [opt (get request-payload "options")]
         (db/insert (option/new-option poll-id opt) OptionDao)))
@@ -38,11 +39,21 @@
 (defn submit-vote
   ""
   [uuid fingerprint]
-  (let [o (db/select-first OptionMapper (str "SELECT * FROM option WHERE uuid='" uuid "'"))
-        p (db/select-first PollMapper (str "SELECT * FROM poll WHERE id='" (:poll_id o) "'"))
+  (let [o (db/select-only OptionMapper (str "SELECT * FROM option WHERE uuid='" uuid "'"))
+
+        ;; get the poll for the option we want to submit a vote for.
+        p (db/select-only PollMapper (str "SELECT * FROM poll WHERE id='" (:poll_id o) "'"))
+
+        ;; get all the votes for all the options for the relevant poll that have the same fingerprint
         votes (db/select VoteMapper (str "SELECT * FROM vote WHERE option_id IN "
-                                         "(SELECT option_id FROM option WHERE poll_id='" (:id p) "')"))]
-    o))
+                                         "(SELECT option_id FROM option WHERE poll_id='" (:id p) "')"
+                                         "AND fingerprint='" fingerprint "'"))]
+    ;; if more than zero votes exist return error
+    (if (empty? votes)
+      (do
+        (db/insert (vote/new-vote (:id o) fingerprint) VoteDao)
+        (assoc (poll-formatter/format-response (:uuid p)) :vote-success "true"))
+      (assoc (poll-formatter/format-response (:uuid p)) :vote-success "false"))))
 
 
 
