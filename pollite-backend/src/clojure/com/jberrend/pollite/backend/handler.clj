@@ -80,13 +80,14 @@
               :headers json-response-headers
               :body    (json/write-str {:uuid (process-new-poll-payload (:body params))})})
 
-           (POST "/vote/:uuid/:fingerprint" [uuid fingerprint]
-             ;; need to make sure that the vote is legitimate (mainly that the fingerprint hasn't already
-             ;; voted in the poll.
-             {:status 200
-              :headers json-response-headers
-              :body (json/write-str (submit-vote uuid fingerprint))}
-             )
+           (POST "/vote" params
+             (let [uuid (get params "optionUuid")
+                   fingerprint (get params "fingerprint")]
+               ;; need to make sure that the vote is legitimate (mainly that the fingerprint hasn't already
+               ;; voted in the poll.
+               {:status  200
+                :headers json-response-headers
+                :body    (json/write-str (submit-vote uuid fingerprint))}))
 
            (route/not-found "Not Found"))
 

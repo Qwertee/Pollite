@@ -36,4 +36,4 @@
   [poll-uuid
    vote-success]
   {"poll" (format-poll-response poll-uuid)
-   "vote-success" vote-success})
+   "voteSuccess" vote-success})

@@ -10,3 +10,8 @@ export interface Poll {
   prompt: string;
   options: Option[];
 }
+
+export interface VoteResponse {
+  poll: Poll;
+  voteSuccess: boolean;
+}
