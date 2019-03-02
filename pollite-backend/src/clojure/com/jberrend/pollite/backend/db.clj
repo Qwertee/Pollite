@@ -4,13 +4,19 @@
            (org.jdbi.v3.sqlobject SqlObjectPlugin))
   (:gen-class))
 
+(defn- get-resource-reader
+  [filename]
+  (let [file (clojure.java.io/resource filename)]
+    (if (nil? file)
+      (throw (RuntimeException. (str "resource file cannot be opened: " filename)))
+      (-> file
+          .getFile
+          clojure.java.io/reader))))
+
 ;; taken (and slightly modified) from https://stackoverflow.com/a/7781443
 (defn- load-props
-  [file-name]
-  (with-open [^java.io.Reader reader (-> file-name
-                                         clojure.java.io/resource
-                                         .getFile
-                                         clojure.java.io/reader)]
+  [filename]
+  (with-open [^java.io.Reader reader (get-resource-reader filename)]
     (let [props (java.util.Properties.)]
       (.load props reader)
       (into {} (for [[k v] props] [(keyword k) (read-string v)])))))

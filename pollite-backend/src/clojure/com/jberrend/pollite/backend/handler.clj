@@ -25,7 +25,8 @@
 ;  (Integer. (re-find #"[0-9]*" str)))
 
 (defn process-new-poll-payload
-  "Takes the given request payload (sent by client) and inserts a new poll and its options into the database"
+  "Takes the given request payload (sent by client) and inserts a new poll and its options into
+   the database"
   [request-payload]
   (let [p (poll/new-poll (str (get request-payload "prompt")))]
     (db/insert p PollDao)
@@ -55,42 +56,41 @@
         (poll-formatter/format-vote-response (:uuid p) true))
       (poll-formatter/format-vote-response (:uuid p) false))))
 
-
-
 (defroutes app-routes
-           (GET "/" []
-             {:status 200
-              :headers json-response-headers
-              :body (json/write-str{:a "some"
-                                    :b "json"})})
+  (GET "/" []
+    {:status 200
+     :headers json-response-headers
+     :body (json/write-str {:a "some"
+                            :b "json"})})
 
-           ;; Should return all necessary info for frontend to display poll
-           (GET "/poll/:uuid" uuid
-             {:status  200
-              :headers json-response-headers
-              :body    (json/write-str                      ; format the json map
-                         (poll-formatter/format-poll-response    ; generate response json
-                           (-> uuid :route-params :uuid)))})
+  ;; Should return all necessary info for frontend to display poll
+  (GET "/poll/:uuid" uuid
+    {:status  200
+     :headers json-response-headers
+     :body    (json/write-str                          ; format the json map
+               (poll-formatter/format-poll-response    ; generate response json
+                (-> uuid :route-params :uuid)))})
 
-           (OPTIONS "/new/poll" []
-             {:headers json-response-headers})
+  (OPTIONS "/new/poll" []
+    {:headers json-response-headers})
 
-           (POST "/new/poll" params
-             {:status  200
-              :headers json-response-headers
-              :body    (json/write-str {:uuid (process-new-poll-payload (:body params))})})
+  (POST "/new/poll" params
+    {:status  200
+     :headers json-response-headers
+     :body    (json/write-str {:uuid (process-new-poll-payload (:body params))})})
 
-           (POST "/vote" params
-             (let [uuid (get params "optionUuid")
-                   fingerprint (get params "fingerprint")]
-               ;; need to make sure that the vote is legitimate (mainly that the fingerprint hasn't already
-               ;; voted in the poll.
-               {:status  200
-                :headers json-response-headers
-                :body    (json/write-str (submit-vote uuid fingerprint))}))
+  (POST "/vote" params
+    (let [body (:body params)
+          uuid (get body "optionUuid")
+          fingerprint (get body "fingerprint")]
 
-           (route/not-found "Not Found"))
+      ;; need to make sure that the vote is legitimate (mainly that the fingerprint hasn't already
+      ;; voted in the poll.
+      {:status  200
+       :headers json-response-headers
+       :body    (json/write-str (submit-vote uuid fingerprint))}))
 
+  (route/not-found "Not Found"))
 
 (defn init []
   (db/initialize))
