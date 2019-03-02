@@ -37,5 +37,14 @@
       </tr>
     </tbody>
   </table>
+  <div *ngIf="this.loading">
+    <progress class="progress is-small" ></progress>
+  </div>
+
+  <div *ngIf="this.voteFailure" class="notification is-danger">
+    <button class="delete" (click)="this.voteFailure=false;" ></button>
+    Vote submission failed. You probably already voted on this poll!
+
+  </div>
 </div>
 

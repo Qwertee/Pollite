@@ -79,6 +79,9 @@
      :headers json-response-headers
      :body    (json/write-str {:uuid (process-new-poll-payload (:body params))})})
 
+  (OPTIONS "/vote" []
+    {:headers json-response-headers})
+
   (POST "/vote" params
     (let [body (:body params)
           uuid (get body "optionUuid")
