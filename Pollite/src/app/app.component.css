@@ -1,0 +1,11 @@
+/* footer behavior taken from: https://css-tricks.com/couple-takes-sticky-footer/ */
+
+.wrapper {
+  min-height: 100%;
+  margin-bottom: -9rem;
+}
+
+
+.footer, .push {
+  height: 9rem; /* same as the wrapper */
+}

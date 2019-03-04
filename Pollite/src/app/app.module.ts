@@ -9,6 +9,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import {FormsModule} from '@angular/forms';
 import { NewComponent } from './poll/new/new.component';
 import {ViewComponent} from './poll/view/view.component';
+import { environment } from '../environments/environment';
 
 const appRoutes: Routes = [
   {path: 'new', component: NewComponent},
@@ -24,7 +25,7 @@ const appRoutes: Routes = [
     PageNotFoundComponent,
   ],
   imports: [
-    RouterModule.forRoot(appRoutes, {enableTracing: true}),
+    RouterModule.forRoot(appRoutes, {enableTracing: !environment.production}),
     PollModule,
     BrowserModule,
     HttpClientModule,

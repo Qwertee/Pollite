@@ -10,9 +10,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     document.addEventListener('DOMContentLoaded', () => {
-      let burger = document.getElementById('navbarBurger');
+      const burger = document.getElementById('navbarBurger');
       burger.addEventListener('click', () => {
-
         // Get the target from the "data-target" attribute
         const target = burger.dataset.target;
         const $target = document.getElementById(target);

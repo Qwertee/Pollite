@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
+  production: true, // keep this line
   serverEndpoint: 'URL OF POLLITE SERVER'
 };
