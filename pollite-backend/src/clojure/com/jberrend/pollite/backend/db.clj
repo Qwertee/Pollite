@@ -1,8 +1,7 @@
 (ns com.jberrend.pollite.backend.db
-  (:require [honeysql.core :as sql])
-  (:import (org.jdbi.v3.core Jdbi)
-           (org.jdbi.v3.sqlobject SqlObjectPlugin))
-  (:gen-class))
+  (:gen-class)
+  (:import org.jdbi.v3.core.Jdbi
+           org.jdbi.v3.sqlobject.SqlObjectPlugin))
 
 ;; taken (and slightly modified) from https://stackoverflow.com/a/7781443
 (defn- load-props
@@ -32,28 +31,51 @@
         (for [[k v] record]
           [(name k) v])))
 
-(defmacro select
-  "executes the given query map, placing the matching rows into
-   objects as determined by the passed mapper type
+;; (defmacro select
+;;   "executes the given query map, placing the matching rows into
+;;    objects as determined by the passed mapper type
 
-   ex. (select OptionMapper {:select [:*] :from [:option]}"
+;;    ex. (select OptionMapper {:select [:*] :from [:option]}"
+;;   [mapper query]
+;;   `(let [handle# (.open ds)]
+;;      (-> handle#
+;;          ; (first (sql/format ~query))
+;;          (.createQuery ~query)
+;;          (.map (new ~mapper))
+;;          (.list))))
+
+(defmacro select
+  "Executes the given query map, placing the matching rows into
+   objects as determined by the passed mapper type."
   [mapper query]
-  `(let [handle# (.open ds)]
-     (-> handle#
-         ; (first (sql/format ~query))
-         (.createQuery ~query)
-         (.map (new ~mapper))
-         (.list))))
+  `(.withHandle ds (reify org.jdbi.v3.core.HandleCallback
+                     (withHandle [this handle#]
+                       (-> handle#
+                           (.createQuery ~query)
+                           (.map (new ~mapper))
+                           (.list))))))
+;; (defmacro insert
+;;   "Inserts the provided model instance into the given database using the given DAO for
+;;    translation."
+;;   ;; TODO: get rid of dao-type - infer based on type of model
+;;   [model dao-type]
+;;   `(let [handle# (.open ds)
+;;          dao# (.attach handle# ~dao-type)]
+;;      (-> dao#
+;;          (.insert (map-key->string-key ~model)))))
 
 (defmacro insert
   "Inserts the provided model instance into the given database using the given DAO for
    translation."
-  ;; TODO: get rid of dao-type - infer based on type of model
   [model dao-type]
-  `(let [handle# (.open ds)
-         dao# (.attach handle# ~dao-type)]
-     (-> dao#
-         (.insert (map-key->string-key ~model)))))
+  `(.withHandle ds (reify org.jdbi.v3.core.HandleCallback
+                     (withHandle [this handle#]
+                       (let [dao# (.attach handle# ~dao-type)]
+                         (-> dao#
+                             (.insert (map-key->string-key ~model))))))))
+
+;; (select-with-handle PollMapper "select * from poll;")
+;; (insert-with-handle adsf PollDao)
 
 ;; example option instance for repl use
 ;(def option (Option. nil
