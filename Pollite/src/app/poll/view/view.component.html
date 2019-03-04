@@ -28,12 +28,23 @@
         <td>{{option.text}}</td>
         <td>{{option.votes}}</td>
         <td class="has-text-centered">
-          <a class="button is-success">
+          <button class="button is-success"
+                  (click)="submitVote(option)"
+                  [disabled]="murmur === undefined">
             Vote!
-          </a>
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
+  <div *ngIf="this.loading">
+    <progress class="progress is-small" ></progress>
+  </div>
+
+  <div *ngIf="this.voteFailure" class="notification is-danger">
+    <button class="delete" (click)="this.voteFailure=false;" ></button>
+    Vote submission failed. You probably already voted on this poll!
+
+  </div>
 </div>
 

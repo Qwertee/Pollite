@@ -3,13 +3,19 @@
   (:import org.jdbi.v3.core.Jdbi
            org.jdbi.v3.sqlobject.SqlObjectPlugin))
 
+(defn- get-resource-reader
+  [filename]
+  (let [file (clojure.java.io/resource filename)]
+    (if (nil? file)
+      (throw (RuntimeException. (str "resource file cannot be opened: " filename)))
+      (-> file
+          .getFile
+          clojure.java.io/reader))))
+
 ;; taken (and slightly modified) from https://stackoverflow.com/a/7781443
 (defn- load-props
-  [file-name]
-  (with-open [^java.io.Reader reader (-> file-name
-                                         clojure.java.io/resource
-                                         .getFile
-                                         clojure.java.io/reader)]
+  [filename]
+  (with-open [^java.io.Reader reader (get-resource-reader filename)]
     (let [props (java.util.Properties.)]
       (.load props reader)
       (into {} (for [[k v] props] [(keyword k) (read-string v)])))))
@@ -43,7 +49,6 @@
 ;;          (.createQuery ~query)
 ;;          (.map (new ~mapper))
 ;;          (.list))))
-
 (defmacro select
   "Executes the given query map, placing the matching rows into
    objects as determined by the passed mapper type."
@@ -54,6 +59,15 @@
                            (.createQuery ~query)
                            (.map (new ~mapper))
                            (.list))))))
+(defmacro select-only
+  "Executes a select statement, but ensures that only one result is returned.
+   Throws an exception if zero, or more than one result was returned from query."
+  [mapper query]
+  `(let [res# (select ~mapper ~query)]
+     (if (= 1 (count res#))
+       (first res#)
+       (throw (Exception. (str "Not one element was returned by query: " ~query))))))
+
 ;; (defmacro insert
 ;;   "Inserts the provided model instance into the given database using the given DAO for
 ;;    translation."

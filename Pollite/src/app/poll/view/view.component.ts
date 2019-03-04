@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {Poll} from '../poll';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import {Option, Poll} from '../poll';
 import {PollService} from '../poll.service';
 import {ActivatedRoute} from '@angular/router';
 
-import * as Fingerprint2 from 'fingerprintjs2';
-import {fingerprint} from '@angular/compiler/src/i18n/digest';
+// import * as Fingerprint2 from 'fingerprintjs2';
+declare var Fingerprint2: any;
 
 @Component({
   selector: 'app-view',
@@ -13,9 +13,11 @@ import {fingerprint} from '@angular/compiler/src/i18n/digest';
 })
 export class ViewComponent implements OnInit {
   poll: Poll;
-  private murmur: string;
+  murmur: string;
+  private loading: boolean = false;
+  private voteFailure: boolean = false;
 
-  constructor(private pollService: PollService, private route: ActivatedRoute) { }
+  constructor(private pollService: PollService, private route: ActivatedRoute, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.pollService.getPoll(this.route.snapshot.params.uuid).subscribe(res => {
@@ -24,15 +26,24 @@ export class ViewComponent implements OnInit {
 
     setTimeout(() => {
       Fingerprint2.get((components) => {
-        console.log(components);
 
         // taken from https://fingerprintjs.com/ src
         this.murmur = Fingerprint2.x64hash128(components.map(function(pair) {
           return pair.value;
         }).join(), 31);
 
-        console.log(this.murmur);
+        this.cdr.detectChanges();
       });
     }, 500);
+  }
+
+  submitVote(option: Option) {
+    this.loading = true;
+    this.pollService.submitVote(option.uuid, this.murmur).subscribe(x => {
+      this.poll = x.poll;
+      this.loading = false;
+
+      this.voteFailure = !x.voteSuccess;
+    });
   }
 }
