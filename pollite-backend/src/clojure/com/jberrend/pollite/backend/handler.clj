@@ -47,7 +47,7 @@
 
         ;; get all the votes for all the options for the relevant poll that have the same fingerprint
         votes (db/select VoteMapper (str "SELECT * FROM vote WHERE option_id IN "
-                                         "(SELECT option_id FROM option WHERE poll_id='" (:id p) "')"
+                                         "(SELECT id FROM option WHERE poll_id='" (:id p) "')"
                                          "AND fingerprint='" fingerprint "'"))]
     ;; if more than zero votes exist return error
     (if (empty? votes)
