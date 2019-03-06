@@ -2,7 +2,7 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :min-lein-version "2.0.0"
-  :dependencies [[org.clojure/clojure "1.9.0"]
+  :dependencies [[org.clojure/clojure "1.10.0"]
                  [compojure "1.6.1"]
                  [org.jdbi/jdbi3-core "3.5.1"]
                  [org.jdbi/jdbi3-sqlobject "3.5.1"]
